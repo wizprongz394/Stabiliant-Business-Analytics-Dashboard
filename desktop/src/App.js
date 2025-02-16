@@ -9,26 +9,27 @@ const App = () => {
   const [monthlySales, setMonthlySales] = useState("");
   const chartRef = useRef(null);
 
-  // Function to Add Data
   const addDataPoint = () => {
-    if (month && ordersInHand && monthlySales) {
+    const trimmedMonth = month.trim();
+    if (trimmedMonth && Number(ordersInHand) >= 0 && Number(monthlySales) >= 0) { // Allow both values to be 0
       const previousAnnualSales = data.length > 0 ? data[data.length - 1].annualSales : 0;
       const annualSales = previousAnnualSales + Number(monthlySales);
-
+  
       setData([...data, { 
-        name: month, 
+        name: trimmedMonth, 
         ordersInHand: Number(ordersInHand), 
         monthlySales: Number(monthlySales), 
         annualSales 
       }]);
-
+  
       setMonth("");
       setOrdersInHand("");
       setMonthlySales("");
     }
   };
+  
 
-  // Function to Save Chart as Image (Now Captures Both Graphs)
+  // Function to Save Chart as Image (Captures Both Graphs)
   const saveChartAsImage = () => {
     if (chartRef.current) {
       html2canvas(chartRef.current, { backgroundColor: "#1B1F23" }).then((canvas) => {
@@ -49,13 +50,13 @@ const App = () => {
 
       {/* Input Form */}
       <div style={{ backgroundColor: "#222", padding: "20px", borderRadius: "10px", boxShadow: "0px 4px 10px rgba(0,255,159,0.3)", width: "60%", margin: "auto", marginBottom: "20px" }}>
-        <input type="text" placeholder="Month (e.g., Nov'19)" value={month} onChange={(e) => setMonth(e.target.value)} 
+        <input type="text" placeholder="Month (e.g., Nov'19)" value={month} onChange={(e) => setMonth(e.target.value.trimStart())} 
           style={{ padding: "10px", margin: "5px", border: "1px solid #00FF9F", background: "#333", color: "#D4D700", borderRadius: "5px", fontSize: "16px", width: "150px" }} />
 
-        <input type="number" placeholder="Orders in Hand" value={ordersInHand} onChange={(e) => setOrdersInHand(e.target.value)} 
+        <input type="number" placeholder="Orders in Hand" value={ordersInHand} onChange={(e) => setOrdersInHand(e.target.value)} min="0.01" step="0.01"
           style={{ padding: "10px", margin: "5px", border: "1px solid #00FF9F", background: "#333", color: "#D4D700", borderRadius: "5px", fontSize: "16px", width: "150px" }} />
 
-        <input type="number" placeholder="Monthly Sales" value={monthlySales} onChange={(e) => setMonthlySales(e.target.value)} 
+        <input type="number" placeholder="Monthly Sales" value={monthlySales} onChange={(e) => setMonthlySales(e.target.value)} min="0.01" step="0.01"
           style={{ padding: "10px", margin: "5px", border: "1px solid #00FF9F", background: "#333", color: "#D4D700", borderRadius: "5px", fontSize: "16px", width: "150px" }} />
 
         <button onClick={addDataPoint} 
@@ -66,8 +67,8 @@ const App = () => {
         </button>
       </div>
 
-      {/* Graph Section (Now Captures Both Graphs) */}
-      <div ref={chartRef} style={{ backgroundColor: "#222", padding: "20px", borderRadius: "10px", boxShadow: "0px 4px 10px rgba(0,255,159,0.3)", width: "80%", margin: "auto" }}>
+      {/* Graph Section */}
+      <div ref={chartRef} style={{ backgroundColor: "#222", padding: "20px", borderRadius: "10px", boxShadow: "0px 4px 10px rgba(0,255,159,0.3)", width: "80%", margin: "auto", border: "1px solid #00FF9F" }}>
         <h3 style={{ color: "#00FF9F" }}>📊 Orders, Sales & Annual Performance</h3>
 
         <ResponsiveContainer width="100%" height={400}>
@@ -75,7 +76,7 @@ const App = () => {
             <CartesianGrid strokeDasharray="3 3" stroke="#555" />
             <XAxis dataKey="name" stroke="#D4D700" />
             <YAxis stroke="#D4D700" />
-            <Tooltip />
+            <Tooltip contentStyle={{ backgroundColor: "#333", border: "1px solid #D4D700", color: "#FFF" }} />
             <Legend />
             <Bar dataKey="ordersInHand" fill="#FF6347" barSize={40} />
             <Bar dataKey="monthlySales" fill="#4682B4" barSize={40} />
@@ -89,7 +90,7 @@ const App = () => {
             <CartesianGrid strokeDasharray="3 3" stroke="#555" />
             <XAxis dataKey="name" stroke="#D4D700" />
             <YAxis stroke="#D4D700" />
-            <Tooltip />
+            <Tooltip contentStyle={{ backgroundColor: "#333", border: "1px solid #D4D700", color: "#FFF" }} />
             <Legend />
             <Line type="monotone" dataKey="annualSales" stroke="#FFD700" strokeWidth={3} dot={{ r: 5 }} />
           </LineChart>

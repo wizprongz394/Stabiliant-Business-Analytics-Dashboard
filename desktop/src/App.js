@@ -121,6 +121,12 @@ const App = () => {
     </div>
   );
 };
+useEffect(() => {
+  fetch("http://localhost:5000/data")
+    .then(response => response.json())
+    .then(data => console.log(data));
+}, []);
+
 
 const styles = {
   container: { textAlign: "center", padding: "20px", fontFamily: "Arial, sans-serif", backgroundColor: "#1B1F23", color: "#D4D700", minHeight: "100vh" },

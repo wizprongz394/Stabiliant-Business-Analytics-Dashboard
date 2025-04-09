@@ -15,7 +15,29 @@ const App = () => {
   useEffect(() => {
     const savedSessions = JSON.parse(localStorage.getItem("savedSessions")) || [];
     setSessions(savedSessions);
+  
+    // Auto-select the last session (optional)
+    if (savedSessions.length > 0) {
+      const lastSession = savedSessions[savedSessions.length - 1];
+      setSelectedSession(lastSession.name);
+      setData(lastSession.data);
+    }
+  
+    // Ping backend
+    const pingBackend = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/");
+        const text = await res.text();
+        console.log("🔁 Backend says:", text);
+      } catch (err) {
+        console.error("❌ Backend connection failed:", err.message);
+      }
+    };
+  
+    pingBackend();
   }, []);
+  
+  
 
   const addDataPoint = () => {
     if (month.trim() && Number(ordersInHand) >= 0 && Number(monthlySales) >= 0) {
@@ -39,14 +61,31 @@ const App = () => {
     }
   };
 
-  const saveSession = () => {
+  const saveSession = async () => {
     if (!sessionName.trim()) return;
+  
     const newSession = { name: sessionName.trim(), data };
     const updatedSessions = [...sessions, newSession];
     setSessions(updatedSessions);
     localStorage.setItem("savedSessions", JSON.stringify(updatedSessions));
     setSessionName("");
+  
+    try {
+      const res = await fetch("http://localhost:5000/save-session", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newSession),
+      });
+  
+      const result = await res.json();
+      console.log("✅ Backend response:", result.message);
+    } catch (error) {
+      console.error("❌ Failed to save session to backend:", error.message);
+    }
   };
+  
 
   const loadSession = () => {
     if (selectedSession) {
@@ -121,11 +160,8 @@ const App = () => {
     </div>
   );
 };
-useEffect(() => {
-  fetch("http://localhost:5000/data")
-    .then(response => response.json())
-    .then(data => console.log(data));
-}, []);
+
+
 
 
 const styles = {

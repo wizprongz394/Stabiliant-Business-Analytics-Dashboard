@@ -1,0 +1,25 @@
+[
+  {
+    "name": "RD",
+    "data": [
+      {
+        "name": "Jan'21",
+        "ordersInHand": 12345,
+        "monthlySales": 234456,
+        "annualSales": 234456
+      },
+      {
+        "name": "feb'21",
+        "ordersInHand": 34567,
+        "monthlySales": 34566,
+        "annualSales": 269022
+      },
+      {
+        "name": "NOV'20",
+        "ordersInHand": 20000,
+        "monthlySales": 20000000,
+        "annualSales": 20269022
+      }
+    ]
+  }
+]

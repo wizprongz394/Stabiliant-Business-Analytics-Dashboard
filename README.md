@@ -113,3 +113,34 @@ npm start
 * Register a new user or login
 * Explore the dashboard, charts, filters, and analytics
 * All requests are connected to the backend API (running on `localhost:5000`)
+
+---
+
+🧪 Sample API Endpoints
+Method	Endpoint	Description
+GET	/api/data	Get analytics data
+POST	/api/auth/login	User login
+POST	/api/auth/register	Register new user
+---
+🧠 Contribution Guidelines
+Fork the repository
+
+Create a new branch:
+
+```bash
+git checkout -b feature-name
+Make your changes
+```
+Commit and push:
+```bash
+git push origin feature-name
+Create a Pull Request
+```
+
+🛡️ License
+This project is licensed under the MIT License.
+
+🙋‍♀️ Maintainer
+Ritodip Dewry
+
+Contributors are welcome! Feel free to fork and submit PRs 😊
